@@ -24,11 +24,10 @@ class StoreCurrencyRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|integer|min:0',
             'name' => 'required|string',
             'short_name' => 'required|string',
-            'actual_course' => 'required|float',
-            'actual_course_date' =>'required|date_format:"Y-m-d H-i-s"',
+            'actual_course' => 'required', // I don't know how to validate floats
+            'actual_course_date' =>'required|date_format:Y-m-d H-i-s',
             'active' => 'required|boolean',
         ];
     }

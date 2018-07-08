@@ -18,9 +18,8 @@ class CurrencyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(CurrencyRepositoryInterface $repo)
     {
-        $repo = app(CurrencyRepositoryInterface::class);
         $result = array_map(
             function($item){
                 return CurrencyPresenter::present($item);
@@ -32,18 +31,16 @@ class CurrencyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCurrencyRequest $request)
+    public function store(StoreCurrencyRequest $request, CurrencyRepositoryInterface $repo)
     {
         $builder = new CurrencyBuilder();
         $data = $request->validated();
-        $currency = $builder->setId($data['id'])
-            ->setName($data['name'])
+        $currency = $builder->setName($data['name'])
             ->setShortName($data['short_name'])
             ->setCourse($data['actual_course'])
             ->setDate($data['actual_course_date'])
             ->setActive($data['active'])
             ->build();
-        $repo = app(CurrencyRepositoryInterface::class);
         $repo->save($currency);
         return response(CurrencyPresenter::present($currency));
     }
@@ -68,9 +65,8 @@ class CurrencyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Currency $currency)
+    public function destroy(Currency $currency, CurrencyRepositoryInterface $repo)
     {
-        $repo = app(CurrencyRepositoryInterface::class);
         $repo->delete($currency);
         return response([
             'message' => "deleted entity",

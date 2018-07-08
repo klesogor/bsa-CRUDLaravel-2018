@@ -26,8 +26,8 @@ class UpdateCurrencyRequest extends FormRequest
         return [
             'name' => 'sometimes|string',
             'short_name' => 'sometimes|string',
-            'actual_course' => 'sometimes|float',
-            'actual_course_date' =>'sometimes|date_format:"Y-m-d H-i-s"',
+            'actual_course' => 'sometimes',
+            'actual_course_date' =>'sometimes|date_format:Y-m-d H-i-s',
             'active' => 'sometimes|boolean',
         ];
     }

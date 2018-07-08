@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
 class Currency
 {
 
@@ -12,7 +14,6 @@ class Currency
     private $date;
     private $active;
 
-    //a bit experimental way to do this;
     public function __construct(int $id,
                                 string $name,
                                 string $shortName,
@@ -33,8 +34,8 @@ class Currency
         $this->name = $params['name'] ?? $this->name;
         $this->shortName = $params['short_name'] ?? $this->shortName;
         $this->price = $params['actual_course'] ?? $this->price;
-        $this->date = isset($params['actual_course_data']) ?
-            \DateTime::createFromFormat('Y-m-d H-i-s',$params['actual_course_data']) :
+        $this->date = isset($params['actual_course_date']) ?
+            \DateTime::createFromFormat('Y-m-d H-i-s',$params['actual_course_date']) :
             $this->date;
         $this->active = $params['active'] ?? $this->active;
         return $this;
@@ -63,7 +64,7 @@ class Currency
 
     public function getActualCourseDate()
     {
-        return $this->date->format('Y-m-d H-i-s');
+        return $this->date;
     }
 
     public  function  isActive()

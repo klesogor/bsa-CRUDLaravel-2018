@@ -3,10 +3,10 @@
 namespace App\Services;
 
 
-class CurrencyBuilder
+final class CurrencyBuilder
 {
     private $date;
-    private $id;
+    private $id = 1;
     private $name;
     private $course;
     private $shortName;
@@ -27,12 +27,6 @@ class CurrencyBuilder
     public function setName(string $name)
     {
         $this->name = $name;
-        return $this;
-    }
-
-    public function setId(int $id)
-    {
-        $this->id = $id;
         return $this;
     }
 
@@ -57,7 +51,7 @@ class CurrencyBuilder
     public function build()
     {
         return new Currency(
-            $this->id,
+            $this->id++,
             $this->name,
             $this->shortName,
             $this->course,

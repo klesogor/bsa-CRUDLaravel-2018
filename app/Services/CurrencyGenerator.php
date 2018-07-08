@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class CurrencyGenerator
 {
@@ -17,17 +18,15 @@ class CurrencyGenerator
 
         $data = (json_decode($data,true))['data'];
         $currencies = [];
-        $id = 1;
         $builder = new CurrencyBuilder();
         foreach ($data as $result){
-            $builder->setId($id)
-                ->setName($result['name'])
+            $builder->setName($result['name'])
                 ->setShortName($result['symbol'])
-                ->setCourse($result['quote']['USD']['price'])
-                ->setDateTimestamp($result['last_changed'])
+                ->setCourse($result['quotes']['USD']['price'])
+                ->setDateTimestamp($result['last_updated'])
                 ->setActive(true);
-            $currencies['id'] = $builder->build();
-            $id++;
+            $item = $builder->build();
+            $currencies[$item->getId()] = $item;
         }
         return $currencies;
 
