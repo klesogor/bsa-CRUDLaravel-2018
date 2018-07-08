@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\Currency;
+use App\Services\CurrencyRepositoryInterface;
 use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
@@ -13,24 +15,13 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
+        $repo = App::make(CurrencyRepositoryInterface::class);
+        return response($repo->findAll());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -39,46 +30,29 @@ class CurrencyController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Currency $currency)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return response($currency->serialize());
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Currency $currency)
     {
         //
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Currency $currency)
     {
-        //
+        $repo = App::make(CurrencyRepositoryInterface::class);
+        $repo->delete($currency);
+        return response([
+            'message' => "deleted entity",
+        ]);
     }
 }

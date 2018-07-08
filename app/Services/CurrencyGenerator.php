@@ -19,14 +19,15 @@ class CurrencyGenerator
         $currencies = [];
         $id = 1;
         foreach ($data as $result){
-            $currencies[] = new Currency(
+            $currencies[$id] = new Currency(
                 $id,
                 $result['name'],
-                strtolower($result['symbol']),
+                $result['symbol'],
                 $result['quotes']['USD']['price'],
                 date('Y-m-d H-i-s',1525137271),
                 true
             );
+            $id++;
         }
         return $currencies;
 

@@ -11,8 +11,9 @@ abstract class PseudoModel
     public function update(array $data):PseudoModel
     {
         foreach ($data as $key=>$value) {
-            if(!in_array($key,$this->allowedAttributes))
+            if(!in_array($key,$this->allowedAttributes)) {
                 throw new \RuntimeException("Model " . static::class . " doesn't have such mass assignable attribute: {$key}");
+            }
             $this->modelData[$key] = $value;
         }
         return $this;
