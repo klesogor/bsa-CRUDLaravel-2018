@@ -23,7 +23,7 @@ Route::prefix('/currencies')->group(
             return response($result);
         });
 
-        Route::get('/{currency}',function(\App\Services\Currency $currency){ //used currencie for route-model binding
+        Route::get('/{currency}',function(\App\Services\Currency $currency){ 
            return  response(\App\Services\CurrencyPresenter::present($currency));
         })->where('currency','[0-9]+');
     }
@@ -32,6 +32,14 @@ Route::prefix('/currencies')->group(
 Route::group(['prefix' => '/admin'],function(){
 
    Route::any('/',function(){})->middleware('redirectCurrencies');
+
+    /**
+     * Alternate way of implementing middleware
+     */
+
+    //Route::any('/',function(){
+    //    return redirect(route('currencies.index'));
+    //})
 
    Route::apiResource('currencies', 'Admin\CurrencyController');
 
