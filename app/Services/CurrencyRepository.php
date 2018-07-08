@@ -14,24 +14,27 @@ class CurrencyRepository implements CurrencyRepositoryInterface
     {
         //force load data from api
         $this->collection = collect(CurrencyGenerator::generate());
-        /*if(Storage::exists('AmazingDB')) {
+        /*
+        if(Storage::exists('AmazingDB')) {
             $this->collection = collect($this->loadFormFile());
         } else {
             $this->collection = collect(CurrencyGenerator::generate());
-        }*/
+        }
+        */
     }
 
     /*  This  was my little implementation of storage. It worked fine, but it crashed tests
         so I had to comment it. Feel free to uncomment, when you assert, that all tests are green
-    */
     
-    //public function __destruct()
-    //{
-    //    $data = [];
-    //    foreach ($this->collection as $item)
-    //        $data[] = CurrencyPresenter::present($item);
-    //    Storage::put('AmazingDB',json_encode($data));
-    //}
+    
+    public function __destruct()
+    {
+        $data = [];
+        foreach ($this->collection as $item)
+            $data[] = CurrencyPresenter::present($item);
+        Storage::put('AmazingDB',json_encode($data));
+    }
+    */
 
     private function loadFormFile(){
         $collect = [];

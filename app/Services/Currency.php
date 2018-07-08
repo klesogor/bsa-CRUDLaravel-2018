@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
-
 class Currency
 {
 
@@ -42,32 +40,32 @@ class Currency
     }
 
     /*  GETTERS SECTION*/
-    public function getId()
+    public function getId():int
     {
         return $this->id;
     }
 
-    public function getName()
+    public function getName():string
     {
         return $this->name;
     }
 
-    public function getShortName()
+    public function getShortName():string
     {
         return $this->shortName;
     }
 
-    public function getActualCourse()
+    public function getActualCourse():float
     {
         return $this->price;
     }
 
-    public function getActualCourseDate()
+    public function getActualCourseDate(): \DateTime
     {
         return $this->date;
     }
 
-    public  function  isActive()
+    public  function  isActive(): bool
     {
         return $this->active;
     }
