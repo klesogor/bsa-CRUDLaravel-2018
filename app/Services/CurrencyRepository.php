@@ -7,22 +7,13 @@ use Illuminate\Support\Facades\Storage;
 
 class CurrencyRepository implements CurrencyRepositoryInterface
 {
+
+    private $collection;
+
     public function __construct()
     {
-        $collect = [];
         if(Storage::exists('AmazingDB')) {
-            $raw = Storage::get('AmazingDB');
-            foreach (json_decode($raw,true) as $item){
-                $collect[$item['id']] = new Currency($item['id'],
-                    $item['id'],
-                    $item['name'],
-                    $item['short_name'],
-                    $item['actual_course'],
-                    $item['actual_course_date'],
-                    $item['active']
-                    );
-            }
-            $this->collection = collect($collect);
+            $this->collection = collect($this->loadFormFile());
         } else {
             $this->collection = collect(CurrencyGenerator::generate());
         }
@@ -30,24 +21,38 @@ class CurrencyRepository implements CurrencyRepositoryInterface
 
     public function __destruct()
     {
-        $data = '';
+        $data = [];
         foreach ($this->collection as $item)
-            $data .= json_encode($item->serialize());
-        Storage::put('AmazingDB',$data);
+            $data[] = CurrencyPresenter::present($item);
+        Storage::put('AmazingDB',json_encode($data));
     }
 
-    private $collection;
+    private function loadFormFile(){
+        $collect = [];
+        $raw = Storage::get('AmazingDB');
+        $builder = new CurrencyBuilder();
+        foreach (json_decode($raw,true) as $item){
+            $builder->setId($item['id'])
+                ->setName($item['name'])
+                ->setShortName($item['short_name'])
+                ->setCourse($item['actual_course'])
+                ->setDate($item['actual_course_date'])
+                ->setActive($item['active']);
+            $collect[$item['id']] =  $builder->build();
+        }
+        return $collect;
+    }
 
     public function findAll(): array
     {
-        return $this->collection->all();
+        return $this->collection->values()->all();
     }
 
     public function findActive(): array
     {
-        $this->collection->get(function ($item){
-            return $item->isActive();
-        });
+        return $this->collection->reject(function ($item,$key){
+            return !$item->isActive();
+        })->values()->toArray();
     }
 
     public function findById(int $id): ?Currency

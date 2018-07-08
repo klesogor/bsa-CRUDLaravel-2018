@@ -28,8 +28,8 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot();
 
-        Route::bind('currencie', function ($value) {
-            return App::make(CurrencyRepositoryInterface::class)->findById($value) ?? abort(404);
+        Route::bind('currency', function ($value) {
+            return app(CurrencyRepositoryInterface::class)->findById($value) ?? abort(404);
         });
     }
 

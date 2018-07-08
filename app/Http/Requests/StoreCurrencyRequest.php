@@ -28,7 +28,7 @@ class StoreCurrencyRequest extends FormRequest
             'name' => 'required|string',
             'short_name' => 'required|string',
             'actual_course' => 'required|float',
-            'actual_course_date' =>'required|date',
+            'actual_course_date' =>'required|date_format:"Y-m-d H-i-s"',
             'active' => 'required|boolean',
         ];
     }

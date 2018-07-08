@@ -15,6 +15,6 @@ class RedirectToCurrenciesMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return redirect('currencies.index');
+        return redirect(route('currencies.index'));
     }
 }

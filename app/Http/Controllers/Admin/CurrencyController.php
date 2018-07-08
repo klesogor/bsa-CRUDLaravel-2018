@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCurrencyRequest;
+use App\Http\Requests\UpdateCurrencyRequest;
 use App\Services\Currency;
+use App\Services\CurrencyBuilder;
+use App\Services\CurrencyPresenter;
 use App\Services\CurrencyRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -15,17 +20,32 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        $repo = App::make(CurrencyRepositoryInterface::class);
-        return response($repo->findAll());
+        $repo = app(CurrencyRepositoryInterface::class);
+        $result = array_map(
+            function($item){
+                return CurrencyPresenter::present($item);
+            }, $repo->findAll());
+        return response($result);
     }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCurrencyRequest $request)
     {
-        //
+        $builder = new CurrencyBuilder();
+        $data = $request->validated();
+        $currency = $builder->setId($data['id'])
+            ->setName($data['name'])
+            ->setShortName($data['short_name'])
+            ->setCourse($data['actual_course'])
+            ->setDate($data['actual_course_date'])
+            ->setActive($data['active'])
+            ->build();
+        $repo = app(CurrencyRepositoryInterface::class);
+        $repo->save($currency);
+        return response(CurrencyPresenter::present($currency));
     }
 
     /**
@@ -33,15 +53,16 @@ class CurrencyController extends Controller
      */
     public function show(Currency $currency)
     {
-        return response($currency->serialize());
+        return response(CurrencyPresenter::present($currency));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Currency $currency)
+    public function update(UpdateCurrencyRequest $request, Currency $currency)
     {
-        //
+        $currency->update($request->validated());
+        return CurrencyPresenter::present($currency);
     }
 
     /**
@@ -49,7 +70,7 @@ class CurrencyController extends Controller
      */
     public function destroy(Currency $currency)
     {
-        $repo = App::make(CurrencyRepositoryInterface::class);
+        $repo = app(CurrencyRepositoryInterface::class);
         $repo->delete($currency);
         return response([
             'message' => "deleted entity",

@@ -17,17 +17,24 @@ Route::prefix('/currencies')->group(
     function(){
         Route::get('/',function(){
             $repo = App::make(\App\Services\CurrencyRepositoryInterface::class);
-            return response($repo->findActive());
+            $result = array_map(function($currency){
+                return \App\Services\CurrencyPresenter::present($currency);
+            },$repo->findActive());
+            return response($result);
         });
-        Route::get('/{currencie}',function(\App\Services\Currency $currency){ //used currencie for route-model binding
-           return  response($currency->serialize());
-        })->where('currencie','[0-9]+');
+
+        Route::get('/{currency}',function(\App\Services\Currency $currency){ //used currencie for route-model binding
+           return  response(\App\Services\CurrencyPresenter::present($currency));
+        })->where('currency','[0-9]+');
     }
 );
 
 Route::group(['prefix' => '/admin'],function(){
+
    Route::any('/',function(){})->middleware('redirectCurrencies');
-   Route::apiResource('currencies', 'CurrencyController');
+
+   Route::apiResource('currencies', 'Admin\CurrencyController');
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

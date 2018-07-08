@@ -2,16 +2,15 @@
 
 namespace App\Services;
 
-class Currency extends PseudoModel
+class Currency
 {
-    protected $allowedAttributes = [
-        'id',
-        'name',
-        'short_name',
-        'actual_course',
-        'actual_course_date',
-        'active',
-    ];
+
+    private $id;
+    private $name;
+    private $shortName;
+    private $price;
+    private $date;
+    private $active;
 
     //a bit experimental way to do this;
     public function __construct(int $id,
@@ -21,43 +20,55 @@ class Currency extends PseudoModel
                                 \DateTime $date,
                                 bool $active )
     {
-        $this->modelData['id'] = $id;
-        $this->modelData['name'] = $name;
-        $this->modelData['short_name'] = $shortName;
-        $this->modelData['actual_course'] = $price;
-        $this->modelData['actual_course_date'] = $date;
-        $this->modelData['active'] = $active;
+        $this->id = $id;
+        $this->name = $name;
+        $this->shortName = $shortName;
+        $this->price = $price;
+        $this->date = $date;
+        $this->active = $active;
     }
 
+    public function update(array $params)
+    {
+        $this->name = $params['name'] ?? $this->name;
+        $this->shortName = $params['short_name'] ?? $this->shortName;
+        $this->price = $params['actual_course'] ?? $this->price;
+        $this->date = isset($params['actual_course_data']) ?
+            \DateTime::createFromFormat('Y-m-d H-i-s',$params['actual_course_data']) :
+            $this->date;
+        $this->active = $params['active'] ?? $this->active;
+        return $this;
+    }
+
+    /*  GETTERS SECTION*/
     public function getId()
     {
-        return $this->modelData['id'];
-
+        return $this->id;
     }
 
     public function getName()
     {
-        return $this->modelData['name'];
+        return $this->name;
     }
 
     public function getShortName()
     {
-        return $this->modelData['short_name'];
+        return $this->shortName;
     }
 
     public function getActualCourse()
     {
-        return $this->modelData['actual_course'];
+        return $this->price;
     }
 
     public function getActualCourseDate()
     {
-        return $this->modelData['actual_course_date'];
+        return $this->date->format('Y-m-d H-i-s');
     }
 
     public  function  isActive()
     {
-        return $this->modelData['active'];
+        return $this->active;
     }
 
 }
