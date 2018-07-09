@@ -18,7 +18,7 @@ class CurrencyGenerator
 
         $data = (json_decode($data,true))['data'];
         $currencies = [];
-        $builder = new CurrencyBuilder();
+        $builder = app()->make(CurrencyBuilder::class);
         foreach ($data as $result){
             $builder->setName($result['name'])
                 ->setShortName($result['symbol'])

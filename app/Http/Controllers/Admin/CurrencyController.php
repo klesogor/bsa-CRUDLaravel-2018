@@ -33,7 +33,7 @@ class CurrencyController extends Controller
      */
     public function store(StoreCurrencyRequest $request, CurrencyRepositoryInterface $repo)
     {
-        $builder = new CurrencyBuilder();
+        $builder = app()->make(CurrencyBuilder::class);
         $data = $request->validated();
         $currency = $builder->setName($data['name'])
             ->setShortName($data['short_name'])
