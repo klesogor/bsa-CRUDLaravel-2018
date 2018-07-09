@@ -12,43 +12,43 @@ final class CurrencyBuilder
     private $shortName;
     private $active;
 
-    public function setDate(string $date)
+    public function setDate(string $date):CurrencyBuilder
     {
         $this->date = \DateTime::createFromFormat('Y-m-d H-i-s',$date);
         return $this;
     }
 
-    public function setDateTimestamp(int $timestamp)
+    public function setDateTimestamp(int $timestamp):CurrencyBuilder
     {
         $this->date = (new \DateTime())->setTimestamp($timestamp);
         return $this;
     }
 
-    public function setName(string $name)
+    public function setName(string $name):CurrencyBuilder
     {
         $this->name = $name;
         return $this;
     }
 
-    public function setCourse(float $course)
+    public function setCourse(float $course):CurrencyBuilder
     {
         $this->course = $course;
         return $this;
     }
 
-    public function  setShortName(string  $name)
+    public function  setShortName(string  $name):CurrencyBuilder
     {
         $this->shortName = $name;
         return $this;
     }
 
-    public function setActive(bool $active)
+    public function setActive(bool $active):CurrencyBuilder
     {
         $this->active = $active;
         return $this;
     }
 
-    public function build()
+    public function build():Currency
     {
         return new Currency(
             $this->id++,
