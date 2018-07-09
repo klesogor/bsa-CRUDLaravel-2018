@@ -39,7 +39,7 @@ class CurrencyRepository implements CurrencyRepositoryInterface
     private function loadFormFile(){
         $collect = [];
         $raw = Storage::get('AmazingDB');
-        $builder = new CurrencyBuilder();
+        $builder = app()->make(CurrencyBuilder::class);
         foreach (json_decode($raw,true) as $item){
             $builder->setName($item['name'])
                 ->setShortName($item['short_name'])
