@@ -59,7 +59,7 @@ class CurrencyController extends Controller
     public function update(UpdateCurrencyRequest $request, Currency $currency)
     {
         $currency->update($request->validated());
-        return CurrencyPresenter::present($currency);
+        return response(CurrencyPresenter::present($currency));
     }
 
     /**

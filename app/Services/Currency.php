@@ -27,7 +27,7 @@ class Currency
         $this->active = $active;
     }
 
-    public function update(array $params)
+    public function update(array $params): Currency
     {
         $this->name = $params['name'] ?? $this->name;
         $this->shortName = $params['short_name'] ?? $this->shortName;
